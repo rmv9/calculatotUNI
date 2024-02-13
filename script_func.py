@@ -1,32 +1,34 @@
 import teleprint_calc as anim
 from time import sleep as s
-import operator as operate
 import text
 import sys
 
+
 #  returns time mark
-def time_marker_converter(mono_time: int) -> str:  
+def time_marker_converter(mono_time: int) -> str:
     """
     signature require monotonic or seconds time values
     """
-    hours, minutes, seconds = round((mono_time / 60) / 60), round(mono_time / 60), round(mono_time % 60)
-    return sys.stdout.write(f'Session time: {hours} hrs. {minutes} min. {seconds} sec.')
+    hours = round((mono_time / 60) / 60)
+    minutes = round(mono_time / 60)
+    seconds = round(mono_time % 60)
+    return f'Session time: {hours} hrs. {minutes} min. {seconds} sec.'
 
 
-def file_open_wr(date):
+def file_open_wr(date) -> str:
     """
-    arg is datetime.datetime only 
+    arg is datetime.datetime only
     writed time and data status in default file
     """
     cur_time = date.strftime('%H:%M')
     cur_date = date.strftime('%d.%m.%Y')
 
-    with open('history.txt', 'a', encoding='utf-8') as file:  # todo stdin-stdout write
+    with open('history.txt', 'a', encoding='utf-8') as file:
         file.writelines(f'START DATE {cur_date}\ntime: {cur_time}, ({date.strftime('%B')}) \n')
         file.writelines('_\n')
     file.close()
 
-    return sys.stdout.write('save status'), s(1.5), sys.stdout.write('\r\r')
+    return 'file updated'
 
 
 def file_close_wr(list_1, list_2, time, session_time):
@@ -45,7 +47,9 @@ def file_close_wr(list_1, list_2, time, session_time):
 
 
 def file_err_writer(description='n/n'):
-
+    """
+    write problems in the defoult file 
+    """
     with open('history.txt', 'a', encoding='utf=8') as file:
         file.writelines('----\n')
         file.writelines(f'(!) {text.input_incor} ({description})\n')
@@ -53,20 +57,15 @@ def file_err_writer(description='n/n'):
     return sys.stdout.write('save status'), s(1.5), sys.stdout.write('\r')
 
 
-def date_time_status(today, time, temp=.5):  # Arg 'time' must be in .strftime(%H:%M) format only
-
-    months = {1: 'января',
-              2: 'февраля',
-              3: 'марта',
-              4: 'апреля',
-              5: 'мая',
-              6: 'июня',
-              7: 'июля',
-              8: 'августа',
-              9: 'сентября',
-              10: 'октября',
-              11: 'ноября',
-              12: 'декабря'}
+def date_time_status(today, time, temp=.5):
+    """
+    'time' must be .strftime(%H:%M) format only
+    arg 'today' is datetime.now()
+    """
+    months = {1: 'января', 2: 'февраля', 3: 'марта',
+              4: 'апреля', 5: 'мая', 6: 'июня',
+              7: 'июля', 8: 'августа', 9: 'сентября',
+              10: 'октября', 11: 'ноября', 12: 'декабря'}
 
     days = {1: 'понедельник',
             2: 'вторник',
@@ -92,42 +91,51 @@ def date_time_status(today, time, temp=.5):  # Arg 'time' must be in .strftime(%
             sys.stdout.write(f'{str(today.day)} {months[today.month]}')), s(temp)
 
 
-def logs_list_saver(num1, num2, opr, answer):
-
+def logs_list_saver(num1, num2, opr, answer) -> str:
+    """
+    reformat args -> string
+    """
     return f'{num1} {opr} {num2} = {answer}'
 
 
 def do_logs_print(lst: list, temp=(.3)):
-
+    """
+    animated print
+    """
     for i in range(len(lst)):
         print(str(i + 1) + '.', lst[i], end='\n'), s(temp)
 
 
-def main_proc(num1: float, num2: float, operator):
+def main_proc(num1: float, num2: float, operator: str):
 
     match operator:
         case '+':
-            return operate.add(num1, num2), text.sum_txt
+            return num1 + num2, text.sum_txt
         case '-':
-            return operate.sub(num1, num2), text.dif_txt
+            return num1 - num2, text.dif_txt
         case '*':
-            return operate.mul(num1, num2), text.prod_txt
+            return num1 * num2, text.prod_txt
         case '/':
-            return operate.truediv(num1, num2), text.quot_txt
+            return num1 / num2, text.quot_txt
+    
+    raise ValueError('Unexpected operator')
 
 
 def user_num_1() -> float:
-
+    """
+    user-input filter
+    Decimal rebuild needed 
+    """
     while True:
         anim.do_tele_words(text.inp_txt_1.capitalize(), .3)
         try:
             number = float(input().strip().replace(',', '.'))
         except ValueError:
-            print(), s(.3), anim.animate_words_del(text.input_incor.capitalize())
+            print(), anim.animate_words_del(text.input_incor.capitalize())
             file_err_writer('num_1/ValueError')
             continue
         if len(str(number)) > 15:
-            print(), s(.3), anim.animate_words_del(text.lim_incor.capitalize())
+            print(), anim.animate_words_del(text.lim_incor.capitalize())
             file_err_writer('num_1/out of limit')
         else:
             return number
@@ -136,12 +144,12 @@ def user_num_1() -> float:
 def operator_1() -> str:
 
     while True:
-        s(.3), anim.do_tele_words(text.inp_oper.capitalize(), .3)
+        anim.do_tele_words(text.inp_oper.capitalize(), .3)
         char = input().strip()
         if char in text.operators:
             return char
         else:
-            print(), s(.4), anim.animate_words_del(text.input_incor)
+            print(), anim.animate_words_del(text.input_incor)
             file_err_writer('operator')
 
 

@@ -1,7 +1,7 @@
-# python
-# rmv9
-# CALCULATOR_BETA v.1
-# copy_past line
+'''python
+rmv9
+CALCULATOR v.1
+copy_past line'''
 
 
 prog_name = 'калькулятор'
@@ -20,7 +20,7 @@ WRDS = dict(inc='недопустимое значение',
             ans='ответ',
             lad='загрузка',
             tdy='сегодня'
-    )
+            )
 
 # Load and incorrect
 loading = WRDS['lad']

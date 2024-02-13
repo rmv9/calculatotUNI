@@ -1,26 +1,32 @@
-
-import datetime, time, text, sys, locale  
+import datetime
+import sys
+import locale
+import time
+import text
 from time import sleep as s
-import teleprint_calc as anim  
-import script_func as sf  
+import teleprint_calc as anim
+#  from typing import Union
+import script_func as sf
 
 locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
 # contains the result-strings of all operations, list of error-logs
-logs = []  
-troubles = [] 
+logs = []
+troubles: list = []
 
-main_date = datetime.datetime.now()  # reading and save system date/time as main_date
-cur_time = main_date.strftime('%H:%M')  # string in format HH:MM
-cur_date = main_date.strftime('%d.%m.%Y')  # date in str format dd.mm.yyyy
+# reading and save system date/time as main_date
+main_date = datetime.datetime.now()
+cur_time: str = main_date.strftime('%H:%M')
+cur_date: str = main_date.strftime('%d.%m.%Y')
 start_time = time.monotonic()
 
-sf.file_open_wr(main_date)  # writing time and date status in default txt.file (history.txt)
+# writing time and date status in default txt.file (history.txt)
+sf.file_open_wr(main_date)
 
-sys.stdout.write('\n'+text.prog_name.capitalize()), s(1.5)  # title line. Write and delete name of program
-sys.stdout.write('\r'), s(.3)  # delete previous line
-anim.do_tele_chars(text.ver), s(1), anim.clear()  # animated version of prog and delete script clear()
-sf.date_time_status(main_date, cur_time)  # print date and time status
+# title
+sys.stdout.write('\n' + text.prog_name.capitalize() + '\n\n')
+s(.5)
+sf.date_time_status(main_date, cur_time, .7)
 
 while True:  # main cycle
     print('\n')  # todo change input() to sys.stdin
@@ -30,14 +36,13 @@ while True:  # main cycle
 
     result, outro = sf.main_proc(user_num_1, user_num_2, operator_1) 
 
-    anim.do_tele_words(outro.capitalize()), s(.7), anim.clear()
-    anim.do_tele_chars_and_rev(round(result), .2)
-    anim.do_tele_math(user_num_1, user_num_2, round(result, 4), operator_1, .3), s(.5)
+    sys.stdout.write(outro.capitalize()+'\n')
+    anim.do_tele_math(user_num_1, user_num_2, round(result, 4), operator_1, .3)
     anim.do_tele_chars('-> ', .3), anim.do_tele_chars(round(result)), print()
 
     logs.append(sf.logs_list_saver(user_num_1, user_num_2, operator_1, round(result, 4)))
 
-    s(1), anim.do_tele_cycle_words('\n1-выход', ' ', .5)
+    anim.do_tele_cycle_words('\n1-выход', ' ', .5)
     if input('->') == '1':
         break
 

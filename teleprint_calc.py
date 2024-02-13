@@ -26,6 +26,7 @@ def do_tele_chars(text, temp=.3):
 
     for c in str(text):
         print(c, end=''), s(temp)
+    return '\n'
 
 
 def do_tele_chars_and_rev(text, temp=.3):
