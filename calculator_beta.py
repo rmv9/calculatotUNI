@@ -34,7 +34,8 @@ while True:  # main cycle
     operator_1 = sf.operator_1()  # operator
     user_num_2 = float(sf.user_num_2(operator_1))
 
-    result, outro = sf.main_proc(user_num_1, user_num_2, operator_1) 
+    result: float = sf.main_proc(user_num_1, user_num_2, operator_1)[0]
+    outro = sf.main_proc(user_num_1, user_num_2, operator_1)[1]
 
     sys.stdout.write(outro.capitalize()+'\n')
     anim.do_tele_math(user_num_1, user_num_2, round(result, 4), operator_1, .3)
